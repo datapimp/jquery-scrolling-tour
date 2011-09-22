@@ -131,7 +131,7 @@
 
 			var $tooltip = $('<div>', {
 				id: options.tooltip_id,
-				className: options.tooltip_class,
+				class: options.tooltip_class,
 				html: '<p>' + point_text + '</p><span class="tooltip_arrow"></span>'
 			}).css({
 				'display': 'none',
