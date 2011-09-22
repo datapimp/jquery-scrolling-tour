@@ -2,20 +2,21 @@
   clear: both;
   display: block;
   margin: 30px auto;
-  width: 960px; }
+  width: 1000px; }
   #container #wrapper {
     float: left;
     width: 100%; }
+    #container #wrapper #scenes-wrapper {
+      width: 1200px; }
     #container #wrapper #scenes-container {
-      clear: left;
       float: left;
-      width: 60%;
+      width: 600px;
       height: 600px;
       overflow: hidden; }
       #container #wrapper #scenes-container .scene {
         float: left;
         height: 600px;
-        width: 100%; }
+        width: 600px; }
         #container #wrapper #scenes-container .scene .point {
           float: left;
           width: 50%;
@@ -23,7 +24,7 @@
     #container #wrapper #tour-sidebar {
       clear: right;
       float: left;
-      width: 40%; }
+      width: 400px; }
     #container #wrapper #scrolling-tour-controller {
       display: block;
       float: left;

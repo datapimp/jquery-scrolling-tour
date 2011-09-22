@@ -2,22 +2,23 @@
   clear: both;
   display: block;
   margin: 30px auto;
-  width: 960px;
+  width: 1000px;
 
   #wrapper {
     float: left;
     width: 100%;
+    #scenes-wrapper {
+      width: 1200px;
+    }
     #scenes-container {
-      clear: left;
       float: left;
-      width: 60%;
+      width: 600px; 
       height: 600px;
       overflow: hidden;
-
       .scene {
         float: left;
         height: 600px; 
-        width: 100%;
+        width: 600px;
         .point {
           float: left;
           width: 50%;
@@ -29,7 +30,7 @@
     #tour-sidebar {
       clear: right;
       float: left;
-      width: 40%;
+      width: 400px; 
     }
 
     #scrolling-tour-controller {

@@ -54,7 +54,12 @@
 			tooltip_id: 'tour_tooltip',
 
 			tooltip_class: 'tooltip',
-
+      
+      // this function will be called to add
+      // additional markup to the tooltip
+      tooltip_builder: function(){
+      
+      },
 			// this function will get called before each scene change
 			// returning false will prevent the point change
 			beforeSceneChange: function(currentScene, nextScene) {
@@ -123,11 +128,11 @@
 		function showPoint(point) {
 			removePoint();
 
-			var step_config = point, 
-			    $elem = $('#' + step_config.name),
-			    bgcolor = step_config.background,
-			    color = step_config.color,
-          point_text = "Text Here"
+	    var $elem = $('#' + point.name),
+          point_el = $('#' + point.name ),
+			    bgcolor = point.background,
+			    color = point.color,
+          point_text = point.text || point_el.data('text');
 
 			var $tooltip = $('<div>', {
 				id: options.tooltip_id,
@@ -143,7 +148,7 @@
 			//the css properties the tooltip should have
 			var properties = {};
 
-			var tip_position = step_config.position;
+			var tip_position = point.position;
 
 			//append the tooltip but hide it
 			$('BODY').prepend($tooltip);

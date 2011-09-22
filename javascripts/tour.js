@@ -3,7 +3,7 @@ $(function(){
     container: 'scene-one',
     points: [{
       name: 'point-one',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
@@ -26,22 +26,22 @@ $(function(){
     container: 'scene-two',
     points:[{
       name: 'point-five',
-      position: 'TR',
+      position: '',
       background: 'black',
       color: 'white'
     },{
       name: 'point-six',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-seven',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-eight',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     }]
@@ -49,22 +49,22 @@ $(function(){
     container: 'scene-three',
     points:[{
       name: 'point-nine',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-ten',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-eleven',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-twelve',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     }]
@@ -72,27 +72,37 @@ $(function(){
     container: 'scene-four',
     points:[{
       name: 'point-thirteen',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-fourteen',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-fifteen',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-sixteen',
-      position: 'TR',
+      position: 'BL',
       background: 'black',
       color: 'white'
     }]
  
   }];
 
-  $('#wrapper').scrollingTour(scenes);
+  $('#wrapper').scrollingTour(scenes,{
+    onPointChange: function(previousPoint, currentPoint) {
+      var point_el = $('#' + currentPoint.name ),
+          icon = point_el.data('icon'),
+          icon_el = $('#' + icon );
+      
+      if( icon_el.length >= 1){
+        icon_el.css({"background-color":"red"});
+      }
+    }
+  });
 });
