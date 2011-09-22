@@ -34,13 +34,13 @@
 			// that will contain a next / previous navigation element
 			controls: '#scrolling-tour-controller',
 
-      sceneContainer: '#scenes-container',
-      
-      // a delay in milliseconds
-      sceneSwitchDelay: 500,
-      
-      // these options get passed directly to jquery.scrollTo
-      sceneSwitchOptions: {},
+			sceneContainer: '#scenes-container',
+
+			// a delay in milliseconds
+			sceneSwitchDelay: 500,
+
+			// these options get passed directly to jquery.scrollTo
+			sceneSwitchOptions: {},
 
 			// which elements within the controls handle next movement 
 			nextSelector: '.next',
@@ -51,28 +51,28 @@
 			// a css class representing a point of interest within a scene
 			pointClass: 'point',
 
+			tooltip_id: 'tour_tooltip',
+
+			tooltip_class: 'tooltip',
+
 			// this function will get called before each scene change
 			// returning false will prevent the point change
 			beforeSceneChange: function(currentScene, nextScene) {
-				console.log("Before Scene Change", arguments);
 				return true;
 			},
 			// this function will get called every time
 			// navigation between points requires a new scene
 			onSceneChange: function(previousScene, currentScene) {
-				console.log("After Scene Change", arguments);
 				return true;
 			},
 			// this function will get called before each point change
 			// returning false will prevent the point change
 			beforePointChange: function(currentPoint, nextPoint) {
-				console.log("Before Point Change", arguments);
 				return true;
 			},
 			// this function will get called every time
 			// the point changes within a scene
 			onPointChange: function(previousPoint, currentPoint) {
-				console.log("On Point Change", arguments);
 				return true;
 			}
 
@@ -80,9 +80,9 @@
 
 		options = $.extend(defaultOptions, options)
 
-		var script = [], 
-        controller = $( options.controls, context ),
-        sceneContainer = $( options.sceneContainer );
+		var script = [],
+		controller = $(options.controls, context),
+		sceneContainer = $(options.sceneContainer);
 
 		var prepareScript = function() {
 			var point, scene, scenes_length = scenes.length,
@@ -120,24 +120,167 @@
 			pointIndex: 0
 		};
 
+		function showPoint(point) {
+			removePoint();
+
+			var step_config = point, 
+			    $elem = $('#' + step_config.name),
+			    bgcolor = step_config.background,
+			    color = step_config.color,
+          point_text = "Text Here"
+
+			var $tooltip = $('<div>', {
+				id: options.tooltip_id,
+				className: options.tooltip_class,
+				html: '<p>' + point_text + '</p><span class="tooltip_arrow"></span>'
+			}).css({
+				'display': 'none',
+				'background-color': bgcolor,
+				'color': color
+			});
+
+			//position the tooltip correctly:
+			//the css properties the tooltip should have
+			var properties = {};
+
+			var tip_position = step_config.position;
+
+			//append the tooltip but hide it
+			$('BODY').prepend($tooltip);
+
+			//get some info of the element
+			var e_w = $elem.outerWidth();
+			var e_h = $elem.outerHeight();
+			var e_l = $elem.offset().left;
+			var e_t = $elem.offset().top;
+
+			switch (tip_position) {
+			case 'TL':
+				properties = {
+					'left': e_l,
+					'top': e_t + e_h + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_TL');
+				break;
+			case 'TR':
+				properties = {
+					'left': e_l + e_w - $tooltip.width() + 'px',
+					'top': e_t + e_h + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_TR');
+				break;
+			case 'BL':
+				properties = {
+					'left': e_l + 'px',
+					'top': e_t - $tooltip.height() + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_BL');
+				break;
+			case 'BR':
+				properties = {
+					'left': e_l + e_w - $tooltip.width() + 'px',
+					'top': e_t - $tooltip.height() + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_BR');
+				break;
+			case 'LT':
+				properties = {
+					'left': e_l + e_w + 'px',
+					'top': e_t + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_LT');
+				break;
+			case 'LB':
+				properties = {
+					'left': e_l + e_w + 'px',
+					'top': e_t + e_h - $tooltip.height() + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_LB');
+				break;
+			case 'RT':
+				properties = {
+					'left': e_l - $tooltip.width() + 'px',
+					'top': e_t + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_RT');
+				break;
+			case 'RB':
+				properties = {
+					'left': e_l - $tooltip.width() + 'px',
+					'top': e_t + e_h - $tooltip.height() + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_RB');
+				break;
+			case 'T':
+				properties = {
+					'left': e_l + e_w / 2 - $tooltip.width() / 2 + 'px',
+					'top': e_t + e_h + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_T');
+				break;
+			case 'R':
+				properties = {
+					'left': e_l - $tooltip.width() + 'px',
+					'top': e_t + e_h / 2 - $tooltip.height() / 2 + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_R');
+				break;
+			case 'B':
+				properties = {
+					'left': e_l + e_w / 2 - $tooltip.width() / 2 + 'px',
+					'top': e_t - $tooltip.height() + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_B');
+				break;
+			case 'L':
+				properties = {
+					'left': e_l + e_w + 'px',
+					'top': e_t + e_h / 2 - $tooltip.height() / 2 + 'px'
+				};
+				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_L');
+				break;
+			}
+
+			var w_t = $(window).scrollTop();
+			var w_b = $(window).scrollTop() + $(window).height();
+			//get the boundaries of the element + tooltip
+			var b_t = parseFloat(properties.top, 10);
+
+			if (e_t < b_t) b_t = e_t;
+
+			var b_b = parseFloat(properties.top, 10) + $tooltip.height();
+			if ((e_t + e_h) > b_b) b_b = e_t + e_h;
+
+      console.log("Showing TOoltip", properties, $tooltip)
+
+			$tooltip.css(properties).show();
+		}
+
+		var removePoint = function() {
+			var tooltip = $('#' + options.tooltip_id);
+
+      console.log("Removign TOoltip", tooltip );
+      tooltip.remove();
+		}
+
 		var getCurrentPoint = function() {
 			return script[current.scriptIndex];
 		};
 
 		var changeScene = function(currentPoint, newPoint) {
-			var currentScene = scenes[ currentPoint.sceneIndex ],
-          newScene = scenes[ newPoint.sceneIndex ];
+			var currentScene = scenes[currentPoint.sceneIndex],
+			newScene = scenes[newPoint.sceneIndex];
 
 			if (!options.beforeSceneChange(currentScene, newScene)) {
 				return false;
 			}
 
-      sceneContainer.scrollTo( $('#'+newScene.container), options.sceneSwitchDelay, options.sceneSwitchOptions );
+			sceneContainer.scrollTo($('#' + newScene.container), options.sceneSwitchDelay, options.sceneSwitchOptions);
 
 			current.scene = newScene;
 			current.sceneIndex = newScene.sceneIndex;
 
-      options.onSceneChange.apply( context, [currentScene, newScene] );
+			options.onSceneChange.apply(context, [currentScene, newScene]);
 
 		}
 
@@ -146,18 +289,18 @@
 				var currentIndex = current.scriptIndex,
 				currentPoint = getCurrentPoint(),
 				newPoint = script[currentIndex + by];
-       
-        if( typeof(newPoint)==="undefined" ){
-          if( currentIndex === 0 ){
-            newPoint = script[0]; 
-          } else {
-            if( options.loop ){
-              newPoint = script[0];
-            } else {
-              return false; 
-            }
-          }
-        }
+
+				if (typeof(newPoint) === "undefined") {
+					if (currentIndex === 0) {
+						newPoint = script[0];
+					} else {
+						if (options.loop) {
+							newPoint = script[0];
+						} else {
+							return false;
+						}
+					}
+				}
 
 				var sceneChanges = newPoint.sceneContainer !== currentPoint.sceneContainer;
 
@@ -176,14 +319,15 @@
 					current.scriptIndex = current.scriptIndex + by;
 					options.onPointChange.apply(context, [currentPoint, newPoint]);
 				}
-
+        
+        showPoint( newPoint );
 				return newPoint;
 
 			}
 		};
 
 		var nextPoint = changePoint(1),
-		    previousPoint = changePoint( - 1);
+		previousPoint = changePoint( - 1);
 
 		$(options.nextSelector, controller).click(nextPoint)
 		$(options.previousSelector, controller).click(previousPoint)
