@@ -292,20 +292,34 @@
 		var changePoint = function(by) {
 			return function() {
 				var currentIndex = current.scriptIndex,
+        maxIndex = script.length,
 				currentPoint = getCurrentPoint(),
-				newPoint = script[currentIndex + by];
+				newPoint;
 
-				if (typeof(newPoint) === "undefined") {
-					if (currentIndex === 0) {
-						newPoint = script[0];
-					} else {
-						if (options.loop) {
-							newPoint = script[0];
-						} else {
-							return false;
-						}
-					}
-				}
+        // currentIndex can't be more than the total length of
+        // script, hence the maxIndex is placed to retain this.
+        // Also, it can't be less than 0 otherwise it will be undefined.
+        // ----------------------------
+        // If options.loop is set to false
+        if (by == -1 && currentIndex == 0)
+          currentIndex = options.loop ? maxIndex : 1;
+        else if (by == 1 && currentIndex == (maxIndex - 1))
+          currentIndex = options.loop ? -1 : maxIndex;
+        console.log("Setting currentIndex: ",currentIndex)
+        newPoint = script[currentIndex + by]
+
+        // Removed by: Eduardo Garibay -- is not working.
+        //if (typeof(newPoint) === "undefined") {
+        //	if (currentIndex === 0) {
+        //		newPoint = script[0];
+        //	} else {
+        //		if (options.loop) {
+        //			newPoint = script[0];
+        //		} else {
+        //			return false;
+        //		}
+        //	}
+        //}
 
 				var sceneChanges = newPoint.sceneContainer !== currentPoint.sceneContainer;
 
@@ -321,7 +335,7 @@
 				}
 
 				if (typeof(newPoint) !== "undefined") {
-					current.scriptIndex = current.scriptIndex + by;
+					current.scriptIndex = currentIndex + by;
 					options.onPointChange.apply(context, [currentPoint, newPoint]);
 				}
         
@@ -332,7 +346,7 @@
 		};
 
 		var nextPoint = changePoint(1),
-		previousPoint = changePoint( - 1);
+		previousPoint = changePoint(-1);
 
 		$(options.nextSelector, controller).click(nextPoint)
 		$(options.previousSelector, controller).click(previousPoint)
