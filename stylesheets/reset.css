@@ -1,0 +1,76 @@
+/* line 1, ../../app/stylesheets/reset.scss */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+/* line 4, ../../app/stylesheets/reset.scss */
+address, caption, cite, code, dfn, th, var {
+  font-style: normal;
+  font-weight: normal;
+}
+
+/* line 5, ../../app/stylesheets/reset.scss */
+caption, th {
+  text-align: left;
+}
+
+/* line 6, ../../app/stylesheets/reset.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 7, ../../app/stylesheets/reset.scss */
+ul {
+  list-style: none;
+}
+
+/* line 8, ../../app/stylesheets/reset.scss */
+blockquote, q {
+  quotes: none;
+}
+
+/* Additional */
+/* line 10, ../../app/stylesheets/reset.scss */
+form label {
+  cursor: pointer;
+}
+
+/* line 10, ../../app/stylesheets/reset.scss */
+fieldset {
+  border: none;
+}
+
+/* line 11, ../../app/stylesheets/reset.scss */
+abbr, acronymn {
+  text-decoration: none;
+  border: 0;
+}
+
+/* line 12, ../../app/stylesheets/reset.scss */
+.clear {
+  clear: both;
+}
+
+/* line 13, ../../app/stylesheets/reset.scss */
+#skip, .hide, hr, #logo-print {
+  display: none;
+}
+
+/* line 14, ../../app/stylesheets/reset.scss */
+strong {
+  font-weight: bold;
+}
+
+/* line 17, ../../app/stylesheets/reset.scss */
+article, aside, canvas, figure, figure img, figcaption, hgroup,
+footer, header, nav, section, audio, video {
+  display: block;
+}
+

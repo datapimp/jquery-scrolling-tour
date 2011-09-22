@@ -1,0 +1,64 @@
+#container {
+  clear: both;
+  display: block;
+  margin: 30px auto;
+  width: 960px;
+
+  #wrapper {
+    float: left;
+    width: 100%;
+    #scenes-container {
+      clear: left;
+      float: left;
+      width: 60%;
+      height: 600px;
+      overflow: hidden;
+
+      .scene {
+        float: left;
+        height: 600px; 
+        width: 100%;
+        .point {
+          float: left;
+          width: 50%;
+          height: 300px;
+        }
+      }
+    }
+
+    #tour-sidebar {
+      clear: right;
+      float: left;
+      width: 40%;
+    }
+
+    #scrolling-tour-controller {
+      display: block;
+      float: left;
+      clear: both;
+      li.previous, li.next {
+        float: left;
+        display: block;
+        width: 150px; 
+        cursor: pointer;
+        border: 1px solid #444;
+        margin-right: 10px;
+      }
+      margin: 15px 0px;
+    }
+
+    #tour-icons {
+      display: block;
+      margin-top: 25px;
+      .icon {
+        width: 30%;
+        height: 50px;
+        float: left;
+        border: 1px solid #444;
+        margin: 5px;
+        padding: 15px;
+      }
+    }
+  }
+}
+
