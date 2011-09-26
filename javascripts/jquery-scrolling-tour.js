@@ -132,12 +132,16 @@
           point_el = $('#' + point.name ),
 			    bgcolor = point.background,
 			    color = point.color,
-          point_text = point.text || point_el.data('text');
+          html_text = point.html_text || false,
+          point_text = point.text || point_el.data('text'),
+          out_html = '<p>' + point_text + '</p><span class="tooltip_arrow"></span>';
+      if (html_text != false)
+        out_html = html_text + '<span class="tooltip_arrow"></span>'
 
 			var $tooltip = $('<div>', {
 				id: options.tooltip_id,
 				class: options.tooltip_class,
-				html: '<p>' + point_text + '</p><span class="tooltip_arrow"></span>'
+				html: out_html
 			}).css({
 				'display': 'none',
 				'background-color': bgcolor,
@@ -256,7 +260,6 @@
 			var b_b = parseFloat(properties.top, 10) + $tooltip.height();
 			if ((e_t + e_h) > b_b) b_b = e_t + e_h;
 
-      console.log("Showing TOoltip", properties, $tooltip)
 
 			$tooltip.css(properties).show();
 		}
@@ -264,7 +267,6 @@
 		var removePoint = function() {
 			var tooltip = $('#' + options.tooltip_id);
 
-      console.log("Removign TOoltip", tooltip );
       tooltip.remove();
 		}
 
@@ -304,22 +306,8 @@
         if (by == -1 && currentIndex == 0)
           currentIndex = options.loop ? maxIndex : 1;
         else if (by == 1 && currentIndex == (maxIndex - 1))
-          currentIndex = options.loop ? -1 : maxIndex;
-        console.log("Setting currentIndex: ",currentIndex)
+          currentIndex = options.loop ? -1 : maxIndex - 2;
         newPoint = script[currentIndex + by]
-
-        // Removed by: Eduardo Garibay -- is not working.
-        //if (typeof(newPoint) === "undefined") {
-        //	if (currentIndex === 0) {
-        //		newPoint = script[0];
-        //	} else {
-        //		if (options.loop) {
-        //			newPoint = script[0];
-        //		} else {
-        //			return false;
-        //		}
-        //	}
-        //}
 
 				var sceneChanges = newPoint.sceneContainer !== currentPoint.sceneContainer;
 
@@ -339,18 +327,26 @@
 					options.onPointChange.apply(context, [currentPoint, newPoint]);
 				}
         
-        showPoint( newPoint );
+        //console.log("Changing Scene? ", sceneChanges)
+        if (sceneChanges == true)
+          setTimeout(function(){ showPoint( newPoint ); }, 500);
+        else
+          showPoint( newPoint );
+
 				return newPoint;
 
 			}
 		};
 
 		var nextPoint = changePoint(1),
-		previousPoint = changePoint(-1);
+		previousPoint = changePoint(-1),
+    init = changePoint(0);
 
 		$(options.nextSelector, controller).click(nextPoint)
 		$(options.previousSelector, controller).click(previousPoint)
 
+    // start with the first point of interest
+    init();
 	};
 
 })(jQuery);

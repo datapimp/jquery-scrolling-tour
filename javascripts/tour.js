@@ -3,22 +3,27 @@ $(function(){
     container: 'scene-one',
     points: [{
       name: 'point-one',
-      position: 'BL',
+      position: 'TL',
       background: 'black',
-      color: 'white'
+      color: 'white',
+      html_text: "\
+        <h2>HTML Sample tip</h2>\
+        <p>I'm a tooltip message</p>\
+        <p>This is new</p>"
     },{
       name: 'point-two',
       position: 'TL',
       background: 'black',
-      color: 'white'
+      color: 'white',
+      text: "simple text-based tip"
     },{
       name: 'point-three',
-      position: 'TL',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-four',
-      position: 'TL',
+      position: 'BL',
       background: 'black',
       color: 'white'
     }]
@@ -26,7 +31,7 @@ $(function(){
     container: 'scene-two',
     points:[{
       name: 'point-five',
-      position: '',
+      position: 'TL',
       background: 'black',
       color: 'white'
     },{
@@ -99,8 +104,9 @@ $(function(){
       var point_el = $('#' + currentPoint.name ),
           icon = point_el.data('icon'),
           icon_el = $('#' + icon );
-      
+
       if( icon_el.length >= 1){
+        $(".icon").css({"background-color":""});
         icon_el.css({"background-color":"red"});
       }
     }
