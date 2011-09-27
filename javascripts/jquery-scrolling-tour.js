@@ -128,25 +128,28 @@
 		function showPoint(point) {
 			removePoint();
 
+      // makes css optional
+      typeof point.css == "undefined" ?  point.css = {"display":"none"} : point.css.display = "none"
+      // makes class_tag optional.
+      typeof point.class_tag == "undefined" ?  point.class_tag = "" : point.class_tag = point.class_tag
+
+
 	    var $elem = $('#' + point.name),
           point_el = $('#' + point.name ),
-			    bgcolor = point.background,
-			    color = point.color,
+          tooltip_class = point.klass,
+          tooltip_css = point.css,
           html_text = point.html_text || false,
           point_text = point.text || point_el.data('text'),
           out_html = '<p>' + point_text + '</p><span class="tooltip_arrow"></span>';
+
       if (html_text != false)
         out_html = html_text + '<span class="tooltip_arrow"></span>'
 
 			var $tooltip = $('<div>', {
 				id: options.tooltip_id,
-				class: options.tooltip_class,
+				class: options.tooltip_class+" "+point.class_tag,
 				html: out_html
-			}).css({
-				'display': 'none',
-				'background-color': bgcolor,
-				'color': color
-			});
+			}).css(tooltip_css);
 
 			//position the tooltip correctly:
 			//the css properties the tooltip should have

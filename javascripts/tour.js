@@ -13,8 +13,8 @@ $(function(){
     },{
       name: 'point-two',
       position: 'TL',
-      background: 'black',
-      color: 'white',
+      css: { "background":"black", "color":"white"},
+      class_tag: "special-point",
       text: "simple text-based tip"
     },{
       name: 'point-three',
