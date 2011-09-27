@@ -128,16 +128,20 @@
 		function showPoint(point) {
 			removePoint();
 
-      // makes css optional
-      typeof point.css == "undefined" ?  point.css = {"display":"none"} : point.css.display = "none"
       // makes class_tag optional.
       typeof point.class_tag == "undefined" ?  point.class_tag = "" : point.class_tag = point.class_tag
+      // makes css optional (overrides class_tag css)
+      typeof point.css == "undefined" ?  point.css = {"display":"none"} : point.css.display = "none"
+      // collects offset modifications of tooltip from parent point
+      typeof point.offset == "undefined" ? point.offset = ["0","0"] : point.offset = point.offset
 
 
 	    var $elem = $('#' + point.name),
           point_el = $('#' + point.name ),
           tooltip_class = point.klass,
           tooltip_css = point.css,
+          tooltip_offset_x = parseFloat(point.offset[0]),
+          tooltip_offset_y = parseFloat(point.offset[1]),
           html_text = point.html_text || false,
           point_text = point.text || point_el.data('text'),
           out_html = '<p>' + point_text + '</p><span class="tooltip_arrow"></span>';
@@ -160,16 +164,18 @@
 			//append the tooltip but hide it
 			$('BODY').prepend($tooltip);
 
+
 			//get some info of the element
-			var e_w = $elem.outerWidth();
-			var e_h = $elem.outerHeight();
-			var e_l = $elem.offset().left;
-			var e_t = $elem.offset().top;
+			var e_w = $elem.outerWidth(),
+			    e_h = $elem.outerHeight(),
+		      e_l = parseFloat($elem.offset().left) + tooltip_offset_x,
+			    e_t = parseFloat($elem.offset().top) + tooltip_offset_y;
+
 
 			switch (tip_position) {
 			case 'TL':
 				properties = {
-					'left': e_l,
+					'left': e_l + 'px',
 					'top': e_t + e_h + 'px'
 				};
 				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_TL');

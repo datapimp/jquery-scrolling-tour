@@ -9,34 +9,34 @@ $(function(){
       html_text: "\
         <h2>HTML Sample tip</h2>\
         <p>I'm a tooltip message</p>\
-        <p>This is new</p>"
+        <p>This is new</p>",
+      offset: ["0","-220"]
     },{
       name: 'point-two',
       position: 'TL',
-      css: { "background":"black", "color":"white"},
+      css: { "color":"red"},
       class_tag: "special-point",
-      text: "simple text-based tip"
+      text: "simple text-based tip",
+      offset: ["30","-260"]
     },{
       name: 'point-three',
       position: 'BL',
-      background: 'black',
-      color: 'white'
+      text: "Third point!",
+      offset: ["20","0"]
     },{
       name: 'point-four',
       position: 'BL',
-      background: 'black',
-      color: 'white'
     }]
   },{
     container: 'scene-two',
     points:[{
       name: 'point-five',
-      position: 'TL',
+      position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-six',
-      position: 'BL',
+      position: 'TL',
       background: 'black',
       color: 'white'
     },{
