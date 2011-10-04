@@ -50,6 +50,8 @@
 			sceneClass: 'scene',
 			// a css class representing a point of interest within a scene
 			pointClass: 'point',
+      // a css class representing all of the scene icons
+      icons: 'icon',
 
 			tooltip_id: 'tour_tooltip',
 
@@ -129,11 +131,11 @@
 			removePoint();
 
       // makes class_tag optional.
-      typeof point.class_tag == "undefined" ?  point.class_tag = "" : point.class_tag = point.class_tag
+      typeof point.class_tag == "undefined" ?  point.class_tag = "" : point.class_tag
       // makes css optional (overrides class_tag css)
       typeof point.css == "undefined" ?  point.css = {"display":"none"} : point.css.display = "none"
       // collects offset modifications of tooltip from parent point
-      typeof point.offset == "undefined" ? point.offset = ["0","0"] : point.offset = point.offset
+      typeof point.offset == "undefined" ? point.offset = ["0","0"] : point.offset
 
 
 	    var $elem = $('#' + point.name),
@@ -300,12 +302,16 @@
 
 		}
 
-		var changePoint = function(by) {
+		var changePoint = function(by,newIndex) {
 			return function() {
 				var currentIndex = current.scriptIndex,
         maxIndex = script.length,
 				currentPoint = getCurrentPoint(),
 				newPoint;
+
+        // hackish way of moving scenes by clicking on scene icons.
+        typeof newIndex == "undefined" ? newIndex = false : newIndex
+        if (newIndex == 0){ newIndex = 1; by = -1; }
 
         // currentIndex can't be more than the total length of
         // script, hence the maxIndex is placed to retain this.
@@ -316,23 +322,33 @@
           currentIndex = options.loop ? maxIndex : 1;
         else if (by == 1 && currentIndex == (maxIndex - 1))
           currentIndex = options.loop ? -1 : maxIndex - 2;
-        newPoint = script[currentIndex + by]
+
+        if (!newIndex)
+          newPoint = script[currentIndex + by]
+        else
+          newPoint = script[newIndex + by]
+        console.log(currentPoint, ":::", newPoint);
 
 				var sceneChanges = newPoint.sceneContainer !== currentPoint.sceneContainer;
 
 				// cancel execution if there is a scene change and the
 				// before scene change callback returns false
 				if (sceneChanges && changeScene(currentPoint, newPoint) == false) {
+          console.log("cancelling");
 					return false;
 				}
 
 				// cancel execution if the before point change callback returns false
 				if (options.beforePointChange.apply(context, [currentPoint, newPoint]) == false) {
+          console.log("cancelling...");
 					return false;
 				}
 
 				if (typeof(newPoint) !== "undefined") {
-					current.scriptIndex = currentIndex + by;
+          if (!newIndex)
+					  current.scriptIndex = currentIndex + by;
+          else
+            current.scriptIndex = newIndex + by;
 					options.onPointChange.apply(context, [currentPoint, newPoint]);
 				}
         
@@ -353,6 +369,29 @@
 
 		$(options.nextSelector, controller).click(nextPoint)
 		$(options.previousSelector, controller).click(previousPoint)
+
+    // Binds sceneChange to scene icons.
+    $("."+options.icons).click(function(){
+      var icon = $(this),
+      selectedScene,
+      sceneLocator = $("."+options.pointClass+"[data-icon='"+icon.attr('id')+"']");
+
+      if (sceneLocator.length > 0 ){
+        $("."+options.icons).removeClass("active");
+        icon.addClass("active");
+        selectedScene = sceneLocator.first().closest('.scene');
+        
+        $(script).each(function(obj){
+          if (script[obj].name == selectedScene.find('div').first().attr('id')){
+            //current.point = script[obj];
+            var updatePoint = changePoint(0,obj);
+            console.log("Updating point to: ",obj)
+            updatePoint();
+            //nextPoint();
+          }
+        });
+      }
+    });
 
     // start with the first point of interest
     init();

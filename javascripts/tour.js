@@ -1,3 +1,21 @@
+//   This handles all the scenes on the Course Tour page.
+//   if you want to remove a specific tooltip on a scene,
+//   just remove it from the array below and it will be
+//   skipped when browsing through them
+//  
+//   points parameters:
+//   name -- id of the point to be shown inside the specified
+//           scene container.
+//   position -- position where the tooltip originally gets displayed.
+//     options: T B TL TR BL BR L R LT LB RT RB
+//   class_tag -- specifies a class tag that appends onto tooltip
+//                for full css customization.
+//   css -- passes inline css styles to tooltip for quickly changing text
+//          color or anything you see unfit.
+//   text -- text to display inside the tooltip.
+//   html_text (overrides text) -- html to display inside the tooltip.
+//   offset -- adjusts the tooltip's original position in pixels. [x,y]
+
 $(function(){
   var scenes = [{
     container: 'scene-one',
@@ -106,8 +124,8 @@ $(function(){
           icon_el = $('#' + icon );
 
       if( icon_el.length >= 1){
-        $(".icon").css({"background-color":""});
-        icon_el.css({"background-color":"red"});
+        $(".icon").removeClass("active");
+        icon_el.addClass("active");
       }
     }
   });
