@@ -310,8 +310,7 @@
 				newPoint;
 
         // hackish way of moving scenes by clicking on scene icons.
-        typeof newIndex == "undefined" ? newIndex = false : newIndex
-        if (newIndex == 0){ newIndex = 1; by = -1; }
+        if(typeof newIndex == "undefined") newIndex = null;
 
         // currentIndex can't be more than the total length of
         // script, hence the maxIndex is placed to retain this.
@@ -323,36 +322,32 @@
         else if (by == 1 && currentIndex == (maxIndex - 1))
           currentIndex = options.loop ? -1 : maxIndex - 2;
 
-        if (!newIndex)
+        if (newIndex == null)
           newPoint = script[currentIndex + by]
         else
           newPoint = script[newIndex + by]
-        console.log(currentPoint, ":::", newPoint);
 
 				var sceneChanges = newPoint.sceneContainer !== currentPoint.sceneContainer;
 
 				// cancel execution if there is a scene change and the
 				// before scene change callback returns false
 				if (sceneChanges && changeScene(currentPoint, newPoint) == false) {
-          console.log("cancelling");
 					return false;
 				}
 
 				// cancel execution if the before point change callback returns false
 				if (options.beforePointChange.apply(context, [currentPoint, newPoint]) == false) {
-          console.log("cancelling...");
 					return false;
 				}
 
 				if (typeof(newPoint) !== "undefined") {
-          if (!newIndex)
+          if (newIndex == null)
 					  current.scriptIndex = currentIndex + by;
           else
             current.scriptIndex = newIndex + by;
 					options.onPointChange.apply(context, [currentPoint, newPoint]);
 				}
         
-        //console.log("Changing Scene? ", sceneChanges)
         if (sceneChanges == true)
           setTimeout(function(){ showPoint( newPoint ); }, 500);
         else
@@ -383,11 +378,8 @@
         
         $(script).each(function(obj){
           if (script[obj].name == selectedScene.find('div').first().attr('id')){
-            //current.point = script[obj];
             var updatePoint = changePoint(0,obj);
-            console.log("Updating point to: ",obj)
             updatePoint();
-            //nextPoint();
           }
         });
       }
