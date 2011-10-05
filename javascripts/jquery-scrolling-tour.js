@@ -56,6 +56,10 @@
 			tooltip_id: 'tour_tooltip',
 
 			tooltip_class: 'tooltip',
+
+      // Tour title and description ids
+      tour_title_id: 'tour-title',
+      tour_description_id: 'tour-description',
       
       // this function will be called to add
       // additional markup to the tooltip
@@ -103,6 +107,8 @@
 				for (var j = 0; j < points_length; j++) {
 					point = scene.points[j];
 					point.sceneContainer = scene.container;
+          point.sceneTitle = scene.title;
+          point.sceneDescription = scene.description;
 					point.sceneIndex = i;
 					point.pointIndex = j;
 					script.push(point);
@@ -285,6 +291,11 @@
 			return script[current.scriptIndex];
 		};
 
+    var updateSceneTitleAndDescription = function(newPoint) {
+      $("#"+options.tour_title_id).html(newPoint.sceneTitle)
+      $("#"+options.tour_description_id).html(newPoint.sceneDescription)
+    }
+
 		var changeScene = function(currentPoint, newPoint) {
 			var currentScene = scenes[currentPoint.sceneIndex],
 			newScene = scenes[newPoint.sceneIndex];
@@ -328,6 +339,7 @@
           newPoint = script[newIndex + by]
 
 				var sceneChanges = newPoint.sceneContainer !== currentPoint.sceneContainer;
+        updateSceneTitleAndDescription(newPoint);
 
 				// cancel execution if there is a scene change and the
 				// before scene change callback returns false
@@ -390,4 +402,3 @@
 	};
 
 })(jQuery);
-

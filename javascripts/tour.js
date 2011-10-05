@@ -19,6 +19,8 @@
 $(function(){
   var scenes = [{
     container: 'scene-one',
+    title: "Tour Demo",
+    description: "This is an explanation of what ever is going on and why the user wants to be taking a tour in the first place",
     points: [{
       name: 'point-one',
       position: 'TL',
@@ -47,6 +49,8 @@ $(function(){
     }]
   },{
     container: 'scene-two',
+    title: "Tour Demo Scene 2",
+    description: "This is a description of scene two",
     points:[{
       name: 'point-five',
       position: 'BL',
@@ -70,6 +74,8 @@ $(function(){
     }]
   },{
     container: 'scene-three',
+    title: "Tour Demo Scene 3",
+    description: "This is displaying the third scene, but still on icon 2",
     points:[{
       name: 'point-nine',
       position: 'BL',
@@ -93,23 +99,24 @@ $(function(){
     }]
   },{
     container: 'scene-four',
+    title: "Tour Demo Scene 4",
     points:[{
       name: 'point-thirteen',
       position: 'BL',
       background: 'black',
       color: 'white'
-    },{
+    }]
+  },{
+    container: 'scene-five',
+    title: "Tour Demo Scene 5",
+    description: "This is displaying the fifth scene, but still on icon 4. As you can see, Scene 4 doesn't update the description, nor title if they are undefined.",
+    points:[{
       name: 'point-fourteen',
       position: 'BL',
       background: 'black',
       color: 'white'
     },{
       name: 'point-fifteen',
-      position: 'BL',
-      background: 'black',
-      color: 'white'
-    },{
-      name: 'point-sixteen',
       position: 'BL',
       background: 'black',
       color: 'white'
