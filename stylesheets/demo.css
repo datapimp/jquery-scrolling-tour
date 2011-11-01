@@ -41,9 +41,12 @@
       display: block;
       margin-top: 25px; }
       #container #wrapper #tour-icons .icon {
+        cursor: pointer;
         width: 30%;
         height: 50px;
         float: left;
         border: 1px solid #444;
         margin: 5px;
         padding: 15px; }
+        #container #wrapper #tour-icons .icon.active {
+          background-color: red; }
