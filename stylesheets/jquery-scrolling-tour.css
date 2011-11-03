@@ -201,3 +201,9 @@
 	float:left;
 }
 
+.special-point {
+  background-color: #efefef;
+  border-color: #000;
+  border-width:2px;
+  padding:10px;
+}

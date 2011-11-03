@@ -50,10 +50,16 @@
 			sceneClass: 'scene',
 			// a css class representing a point of interest within a scene
 			pointClass: 'point',
+      // a css class representing all of the scene icons
+      icons: 'icon',
 
 			tooltip_id: 'tour_tooltip',
 
 			tooltip_class: 'tooltip',
+
+      // Tour title and description ids
+      tour_title_id: 'tour-title',
+      tour_description_id: 'tour-description',
       
       // this function will be called to add
       // additional markup to the tooltip
@@ -101,6 +107,8 @@
 				for (var j = 0; j < points_length; j++) {
 					point = scene.points[j];
 					point.sceneContainer = scene.container;
+          point.sceneTitle = scene.title;
+          point.sceneDescription = scene.description;
 					point.sceneIndex = i;
 					point.pointIndex = j;
 					script.push(point);
@@ -128,25 +136,32 @@
 		function showPoint(point) {
 			removePoint();
 
+      // makes class_tag optional.
+      typeof point.class_tag == "undefined" ?  point.class_tag = "" : point.class_tag
+      // makes css optional (overrides class_tag css)
+      typeof point.css == "undefined" ?  point.css = {"display":"none"} : point.css.display = "none"
+      // collects offset modifications of tooltip from parent point
+      typeof point.offset == "undefined" ? point.offset = ["0","0"] : point.offset
+
+
 	    var $elem = $('#' + point.name),
           point_el = $('#' + point.name ),
-			    bgcolor = point.background,
-			    color = point.color,
+          tooltip_class = point.klass,
+          tooltip_css = point.css,
+          tooltip_offset_x = parseFloat(point.offset[0]),
+          tooltip_offset_y = parseFloat(point.offset[1]),
           html_text = point.html_text || false,
           point_text = point.text || point_el.data('text'),
           out_html = '<p>' + point_text + '</p><span class="tooltip_arrow"></span>';
+
       if (html_text != false)
         out_html = html_text + '<span class="tooltip_arrow"></span>'
 
 			var $tooltip = $('<div>', {
 				id: options.tooltip_id,
-				class: options.tooltip_class,
+				class: options.tooltip_class+" "+point.class_tag,
 				html: out_html
-			}).css({
-				'display': 'none',
-				'background-color': bgcolor,
-				'color': color
-			});
+			}).css(tooltip_css);
 
 			//position the tooltip correctly:
 			//the css properties the tooltip should have
@@ -157,16 +172,18 @@
 			//append the tooltip but hide it
 			$('BODY').prepend($tooltip);
 
+
 			//get some info of the element
-			var e_w = $elem.outerWidth();
-			var e_h = $elem.outerHeight();
-			var e_l = $elem.offset().left;
-			var e_t = $elem.offset().top;
+			var e_w = $elem.outerWidth(),
+			    e_h = $elem.outerHeight(),
+		      e_l = parseFloat($elem.offset().left) + tooltip_offset_x,
+			    e_t = parseFloat($elem.offset().top) + tooltip_offset_y;
+
 
 			switch (tip_position) {
 			case 'TL':
 				properties = {
-					'left': e_l,
+					'left': e_l + 'px',
 					'top': e_t + e_h + 'px'
 				};
 				$tooltip.find('span.tooltip_arrow').addClass('tooltip_arrow_TL');
@@ -274,6 +291,11 @@
 			return script[current.scriptIndex];
 		};
 
+    var updateSceneTitleAndDescription = function(newPoint) {
+      $("#"+options.tour_title_id).html(newPoint.sceneTitle)
+      $("#"+options.tour_description_id).html(newPoint.sceneDescription)
+    }
+
 		var changeScene = function(currentPoint, newPoint) {
 			var currentScene = scenes[currentPoint.sceneIndex],
 			newScene = scenes[newPoint.sceneIndex];
@@ -291,12 +313,15 @@
 
 		}
 
-		var changePoint = function(by) {
+		var changePoint = function(by,newIndex) {
 			return function() {
 				var currentIndex = current.scriptIndex,
         maxIndex = script.length,
 				currentPoint = getCurrentPoint(),
 				newPoint;
+
+        // hackish way of moving scenes by clicking on scene icons.
+        if(typeof newIndex == "undefined") newIndex = null;
 
         // currentIndex can't be more than the total length of
         // script, hence the maxIndex is placed to retain this.
@@ -307,9 +332,14 @@
           currentIndex = options.loop ? maxIndex : 1;
         else if (by == 1 && currentIndex == (maxIndex - 1))
           currentIndex = options.loop ? -1 : maxIndex - 2;
-        newPoint = script[currentIndex + by]
+
+        if (newIndex == null)
+          newPoint = script[currentIndex + by]
+        else
+          newPoint = script[newIndex + by]
 
 				var sceneChanges = newPoint.sceneContainer !== currentPoint.sceneContainer;
+        updateSceneTitleAndDescription(newPoint);
 
 				// cancel execution if there is a scene change and the
 				// before scene change callback returns false
@@ -323,11 +353,13 @@
 				}
 
 				if (typeof(newPoint) !== "undefined") {
-					current.scriptIndex = currentIndex + by;
+          if (newIndex == null)
+					  current.scriptIndex = currentIndex + by;
+          else
+            current.scriptIndex = newIndex + by;
 					options.onPointChange.apply(context, [currentPoint, newPoint]);
 				}
         
-        //console.log("Changing Scene? ", sceneChanges)
         if (sceneChanges == true)
           setTimeout(function(){ showPoint( newPoint ); }, 500);
         else
@@ -345,9 +377,28 @@
 		$(options.nextSelector, controller).click(nextPoint)
 		$(options.previousSelector, controller).click(previousPoint)
 
+    // Binds sceneChange to scene icons.
+    $("."+options.icons).click(function(){
+      var icon = $(this),
+      selectedScene,
+      sceneLocator = $("."+options.pointClass+"[data-icon='"+icon.attr('id')+"']");
+
+      if (sceneLocator.length > 0 ){
+        $("."+options.icons).removeClass("active");
+        icon.addClass("active");
+        selectedScene = sceneLocator.first().closest('.scene');
+        
+        $(script).each(function(obj){
+          if (script[obj].name == selectedScene.find('div').first().attr('id')){
+            var updatePoint = changePoint(0,obj);
+            updatePoint();
+          }
+        });
+      }
+    });
+
     // start with the first point of interest
     init();
 	};
 
 })(jQuery);
-
